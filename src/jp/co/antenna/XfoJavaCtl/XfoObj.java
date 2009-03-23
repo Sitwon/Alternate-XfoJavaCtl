@@ -28,6 +28,7 @@ public class XfoObj {
     private String printer;
     private String stylesheetDoc;
     private MessageListener messageListener;
+    private String multivol;
     
     // Methods
     /**
@@ -56,6 +57,7 @@ public class XfoObj {
         this.outputDoc = null;
         this.exitLevel = null;
         this.stylesheetDoc = null;
+        this.multivol = null;
     }
     
     /**
@@ -78,6 +80,8 @@ public class XfoObj {
             localCommandline += this.exitLevel;
         if (this.printer != null)
             localCommandline += this.printer;
+        if (this.multivol != null)
+            localCommandline += this.multivol;
         try {
             process = this.r.exec(localCommandline);
             exitCode = process.waitFor();
@@ -203,5 +207,21 @@ public class XfoObj {
     public void releaseObjectEx () throws XfoException {
         // fake it?
         this.Clear();
+    }
+    
+    public void setMultivol (boolean multiVol) {
+        if (multiVol) {
+            this.multivol = " -multivol ";
+        } else {
+            this.multivol = null;
+        }
+    }
+    
+    public void setPdfEmbedAllFontsEx (int embedLevel) throws XfoException {
+        // fill it in
+    }
+    
+    public void setPdfImageCompression (int compressionMethod) {
+        // fill it in
     }
 }
