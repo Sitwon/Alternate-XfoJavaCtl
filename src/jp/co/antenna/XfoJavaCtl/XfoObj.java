@@ -30,6 +30,7 @@ public class XfoObj {
     private MessageListener messageListener;
     private String multivol;
     private String optionFile;
+    private FileOutputStream logStream;
     
     // Methods
     /**
@@ -88,10 +89,32 @@ public class XfoObj {
             localCommandline += this.multivol;
         try {
             process = this.r.exec(localCommandline);
+            if (this.logStream != null) {
+                byte[] b = new byte[100];
+                while (process.getErrorStream().read(b) != 1) {
+                    try {
+                        this.logStream.write(b);
+                    } catch (Exception Ex) {
+                        throw new XfoException (2, 2, "Error writting to log file.");
+                    }
+                }
+            }
             exitCode = process.waitFor();
         } catch (Exception e) {}
         if (exitCode != 0)
             throw new XfoException(4, 1, "Something went wrong.");
+    }
+    
+    public void setErrorLogPath (String path) throws XfoException {
+        try {
+            if (path != null && !path.equals("")) {
+                this.logStream = new FileOutputStream(path);
+            } else {
+                this.logStream = null;
+            }
+        } catch (Exception e) {
+            throw new XfoException(2, 1, "Unable to open log file for writing.");
+        }
     }
     
     /**
