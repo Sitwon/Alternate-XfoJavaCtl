@@ -29,6 +29,7 @@ public class XfoObj {
     private String stylesheetDoc;
     private MessageListener messageListener;
     private String multivol;
+    private String optionFile;
     
     // Methods
     /**
@@ -58,6 +59,7 @@ public class XfoObj {
         this.exitLevel = null;
         this.stylesheetDoc = null;
         this.multivol = null;
+        this.optionFile = null;
     }
     
     /**
@@ -74,6 +76,8 @@ public class XfoObj {
             localCommandline += this.inputDoc;
         if (this.stylesheetDoc != null)
             localCommandline += this.stylesheetDoc;
+        if (this.optionFile != null)
+            localCommandline += this.optionFile;
         if (this.outputDoc != null)
             localCommandline += this.outputDoc;
         if (this.exitLevel != null)
@@ -198,6 +202,14 @@ public class XfoObj {
             this.stylesheetDoc = " -s " + uri;
         else
             this.stylesheetDoc = null;
+    }
+    
+    public void setOptionFileURI (String path) {
+        // -i 
+        if (path != null && !path.equals(""))
+            this.optionFile = " -i " + path;
+        else
+            this.optionFile = null;
     }
     
     public void setErrorStreamType (int type) {
