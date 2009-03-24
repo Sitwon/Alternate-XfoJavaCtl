@@ -100,7 +100,7 @@ public class XfoObj {
     
     public void setErrorLogPath (String path) {
         if (path != null && !path.equals("")) {
-            this.logPath = " 2> " + path;
+            this.logPath = " 2>> " + path;
         } else {
             this.logPath = null;
         }
