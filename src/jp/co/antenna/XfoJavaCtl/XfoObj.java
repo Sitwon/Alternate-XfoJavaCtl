@@ -60,7 +60,9 @@ public class XfoObj {
     public void execute () throws XfoException {
         String cmdLine = this.executable;
         for (String arg : args.keySet()) {
-            cmdLine += " " + arg + " " + args.get(arg);
+            cmdLine += " " + arg; 
+            if ((args.get(arg) != null) && (!args.get(arg).equals("")))
+                cmdLine += " \"" + args.get(arg) + "\"";
         }
         // Run Formatter with Runtime.exec()
         Process process;
@@ -95,7 +97,9 @@ public class XfoObj {
      * @throws jp.co.antenna.XfoJavaCtl.XfoException
      */
     public void render (InputStream src, OutputStream dst, String outDevice) throws XfoException {
-        // Fill this in.
+        if (this.messageListener != null)
+            this.messageListener.onMessage(4, 0, "render() is not implemented yet.");
+        throw new XfoException(4, 0, "render() is not implemented yet.");
     }
     
     /**
