@@ -19,6 +19,10 @@ public class XfoObj {
     public static final int EST_STDOUT = 1;
     public static final int EST_STDERR = 2;
     
+    public static final int S_PDF_EMBALLFONT_PART = 0;
+    public static final int S_PDF_EMBALLFONT_ALL = 1;
+    public static final int S_PDF_EMBALLFONT_BASE14 = 2;
+    
     // Attributes
     private String executable;
     private Runtime r;
@@ -80,12 +84,9 @@ public class XfoObj {
             throw new XfoException(4, 1, "Something went wrong.");
     }
     
-    public void setErrorLogPath (String path) {
-        if (path != null && !path.equals("")) {
-            this.logPath = " 2>> " + path;
-        } else {
-            this.logPath = null;
-        }
+    public void releaseObjectEx () throws XfoException {
+        // fake it?
+        this.Clear();
     }
     
     /**
@@ -102,17 +103,8 @@ public class XfoObj {
         throw new XfoException(4, 0, "render() is not implemented yet.");
     }
     
-    /**
-     * Register the MessageListener interface to the instance of implemented class.
-     * <br>The error that occurred during the formatting process can be received as the event. 
-     * 
-     * @param listener The instance of implemented class
-     */
-    public void setMessageListener (MessageListener listener) {
-        if (listener != null)
-            this.messageListener = listener;
-        else
-            this.messageListener = null;
+    public void setBatchPrint (boolean bat) {
+        // Fake it. 
     }
     
     /**
@@ -135,28 +127,16 @@ public class XfoObj {
         }
     }
     
-    /**
-     * Specifies the output file path of the formatted result.
-     * <br>When the printer is specified as an output format by setPrinterName, a
-     * printing result is saved to the specified file by the printer driver.
-     * <br>When output format other than a printer is specified, it is saved at the 
-     * specified file with the specified output format.
-     * <br>When omitted, or when "@STDOUT" is specified, it comes to standard output. 
-     * 
-     * @param path Path name of output file
-     * @throws jp.co.antenna.XfoJavaCtl.XfoException
-     */
-    public void setOutputFilePath (String path) throws XfoException {
-        // Set the path...
-        String opt = "-o";
+    public void setErrorLogPath (String path) {
         if (path != null && !path.equals("")) {
-            if (this.args.containsKey(opt))
-                this.args.remove(opt);
-            this.args.put(opt, path);
+            this.logPath = " 2>> " + path;
+        } else {
+            this.logPath = null;
         }
-        else {
-            this.args.remove(opt);
-        }
+    }
+    
+    public void setErrorStreamType (int type) {
+        // Fake it.
     }
     
     /**
@@ -197,6 +177,66 @@ public class XfoObj {
         // Fill this in....
     }
     
+    /**
+     * Register the MessageListener interface to the instance of implemented class.
+     * <br>The error that occurred during the formatting process can be received as the event. 
+     * 
+     * @param listener The instance of implemented class
+     */
+    public void setMessageListener (MessageListener listener) {
+        if (listener != null)
+            this.messageListener = listener;
+        else
+            this.messageListener = null;
+    }
+    
+    public void setMultivol (boolean multiVol) {
+        String opt = "-multivol";
+        if (multiVol) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+    
+    /**
+     * Specifies the output file path of the formatted result.
+     * <br>When the printer is specified as an output format by setPrinterName, a
+     * printing result is saved to the specified file by the printer driver.
+     * <br>When output format other than a printer is specified, it is saved at the 
+     * specified file with the specified output format.
+     * <br>When omitted, or when "@STDOUT" is specified, it comes to standard output. 
+     * 
+     * @param path Path name of output file
+     * @throws jp.co.antenna.XfoJavaCtl.XfoException
+     */
+    public void setOutputFilePath (String path) throws XfoException {
+        // Set the path...
+        String opt = "-o";
+        if (path != null && !path.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, path);
+        }
+        else {
+            this.args.remove(opt);
+        }
+    }
+    
+    public void setPdfEmbedAllFontsEx (int embedLevel) throws XfoException {
+        // fill it in
+        String opt = "-peb";
+        if (embedLevel != -1) {
+            this.args.put(opt, String.valueOf(embedLevel));
+        } else {
+            this.args.remove(opt);
+        }
+    }
+    
+    public void setPdfImageCompression (int compressionMethod) {
+        // fill it in
+    }
+    
     public void setPrinterName (String prn) {
         String opt = "-p";
         if (prn != null && !prn.equals("")) {
@@ -207,10 +247,6 @@ public class XfoObj {
         else {
             this.args.remove(opt);
         }
-    }
-    
-    public void setBatchPrint (boolean bat) {
-        // Fake it. 
     }
     
     public void setStylesheetURI (String uri) {
@@ -237,29 +273,7 @@ public class XfoObj {
         }
     }
     
-    public void setErrorStreamType (int type) {
-        // Fake it.
-    }
-    
-    public void releaseObjectEx () throws XfoException {
-        // fake it?
-        this.Clear();
-    }
-    
-    public void setMultivol (boolean multiVol) {
-        String opt = "-multivol";
-        if (multiVol) {
-            this.args.put(opt, "");
-        } else {
-            this.args.remove(opt);
-        }
-    }
-    
-    public void setPdfEmbedAllFontsEx (int embedLevel) throws XfoException {
-        // fill it in
-    }
-    
-    public void setPdfImageCompression (int compressionMethod) {
+    public void setXSLTParam (String paramName, String value) {
         // fill it in
     }
 }
