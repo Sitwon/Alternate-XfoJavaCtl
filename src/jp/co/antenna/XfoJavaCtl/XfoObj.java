@@ -43,17 +43,18 @@ public class XfoObj {
             throw new XfoException(4, 1, "Can't find %AXF43_HOME%");
         this.executable = axf_home + "\\XslCmd.exe";
         // setup attributes
-        this.Clear();
+        this.clear();
     }
     
     /**
      * Cleanup (initialize) XSL Formatter engine.
      */
-    public void Clear () {
+    public void clear () {
         // reset attributes        
         this.r = Runtime.getRuntime();
         this.logPath = null;
         this.args = new LinkedHashMap();
+        this.messageListener = null;
     }
     
     /**
@@ -86,7 +87,7 @@ public class XfoObj {
     
     public void releaseObjectEx () throws XfoException {
         // fake it?
-        this.Clear();
+        this.clear();
     }
     
     /**
