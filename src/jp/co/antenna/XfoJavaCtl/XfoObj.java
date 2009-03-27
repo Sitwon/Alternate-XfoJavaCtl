@@ -6,6 +6,7 @@
 package jp.co.antenna.XfoJavaCtl;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * XfoObj Class is the object class of XSL Formatter
@@ -20,17 +21,10 @@ public class XfoObj {
     
     // Attributes
     private String executable;
-    private String commandline;
     private Runtime r;
-    private String inputDoc;
-    private String outputDoc;
-    private String exitLevel;
-    private String printer;
-    private String stylesheetDoc;
     private MessageListener messageListener;
-    private String multivol;
-    private String optionFile;
     private String logPath;
+    private LinkedHashMap<String, String> args;
     
     // Methods
     /**
@@ -54,14 +48,8 @@ public class XfoObj {
     public void Clear () {
         // reset attributes        
         this.r = Runtime.getRuntime();
-        this.commandline = this.executable;
-        this.inputDoc = null;
-        this.outputDoc = null;
-        this.exitLevel = null;
-        this.stylesheetDoc = null;
-        this.multivol = null;
-        this.optionFile = null;
         this.logPath = null;
+        this.args = new LinkedHashMap();
     }
     
     /**
@@ -70,28 +58,20 @@ public class XfoObj {
      * @throws jp.co.antenna.XfoJavaCtl.XfoException
      */
     public void execute () throws XfoException {
+        String cmdLine = this.executable;
+        for (String arg : args.keySet()) {
+            cmdLine += " " + arg + " " + args.get(arg);
+        }
         // Run Formatter with Runtime.exec()
-        String localCommandline = this.commandline;
         Process process;
         int exitCode = -1;
-        if (this.inputDoc != null)
-            localCommandline += this.inputDoc;
-        if (this.stylesheetDoc != null)
-            localCommandline += this.stylesheetDoc;
-        if (this.optionFile != null)
-            localCommandline += this.optionFile;
-        if (this.outputDoc != null)
-            localCommandline += this.outputDoc;
-        if (this.exitLevel != null)
-            localCommandline += this.exitLevel;
-        if (this.printer != null)
-            localCommandline += this.printer;
-        if (this.multivol != null)
-            localCommandline += this.multivol;
-        if (this.logPath != null)
-            localCommandline += this.logPath;
+        if (this.logPath != null) {
+            cmdLine += this.logPath;
+        }
         try {
-            process = this.r.exec(localCommandline);
+            if (this.messageListener != null)
+                this.messageListener.onMessage(0, 0, cmdLine);
+            process = this.r.exec(cmdLine);
             exitCode = process.waitFor();
         } catch (Exception e) {}
         if (exitCode != 0)
@@ -125,8 +105,10 @@ public class XfoObj {
      * @param listener The instance of implemented class
      */
     public void setMessageListener (MessageListener listener) {
-        // Fake it.
-        this.messageListener = listener;
+        if (listener != null)
+            this.messageListener = listener;
+        else
+            this.messageListener = null;
     }
     
     /**
@@ -138,10 +120,15 @@ public class XfoObj {
      */
     public void setDocumentURI (String uri) throws XfoException {
         // Set the URI...
-        if (uri != null && !uri.equals(""))
-            this.inputDoc = " -d " + uri;
-        else
-            this.inputDoc = null;
+        String opt = "-d";
+        if (uri != null && !uri.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, uri);
+        }
+        else {
+            this.args.remove(opt);
+        }
     }
     
     /**
@@ -157,10 +144,15 @@ public class XfoObj {
      */
     public void setOutputFilePath (String path) throws XfoException {
         // Set the path...
-        if (path != null && !path.equals(""))
-            this.outputDoc = " -o " + path;
-        else
-            this.outputDoc = null;
+        String opt = "-o";
+        if (path != null && !path.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, path);
+        }
+        else {
+            this.args.remove(opt);
+        }
     }
     
     /**
@@ -176,7 +168,10 @@ public class XfoObj {
      */
     public void setExitLevel (int level) throws XfoException {
         // Set the level...
-        this.exitLevel = " -extlevel " + String.valueOf(level);
+        String opt = "-extlevel";
+        if (this.args.containsKey(opt))
+            this.args.remove(opt);
+        this.args.put(opt, String.valueOf(level));
     }
     
     /**
@@ -199,10 +194,15 @@ public class XfoObj {
     }
     
     public void setPrinterName (String prn) {
-        if (prn != null && !prn.equals(""))
-            this.printer = " -p " + prn;
-        else
-            this.printer = null;
+        String opt = "-p";
+        if (prn != null && !prn.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, prn);
+        }
+        else {
+            this.args.remove(opt);
+        }
     }
     
     public void setBatchPrint (boolean bat) {
@@ -210,18 +210,27 @@ public class XfoObj {
     }
     
     public void setStylesheetURI (String uri) {
-        if (uri != null && !uri.equals(""))
-            this.stylesheetDoc = " -s " + uri;
-        else
-            this.stylesheetDoc = null;
+        String opt = "-s";
+        if (uri != null && !uri.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, uri);
+        }
+        else {
+            this.args.remove(opt);
+        }
     }
     
     public void setOptionFileURI (String path) {
-        // -i 
-        if (path != null && !path.equals(""))
-            this.optionFile = " -i " + path;
-        else
-            this.optionFile = null;
+        String opt = "-i";
+        if (path != null && !path.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, path);
+        }
+        else {
+            this.args.remove(opt);
+        }
     }
     
     public void setErrorStreamType (int type) {
@@ -234,10 +243,11 @@ public class XfoObj {
     }
     
     public void setMultivol (boolean multiVol) {
+        String opt = "-multivol";
         if (multiVol) {
-            this.multivol = " -multivol ";
+            this.args.put(opt, "");
         } else {
-            this.multivol = null;
+            this.args.remove(opt);
         }
     }
     
