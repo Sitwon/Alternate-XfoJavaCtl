@@ -79,6 +79,12 @@ public class XfoObj {
             if (this.messageListener != null)
                 this.messageListener.onMessage(0, 0, cmdLine);
             process = this.r.exec(cmdLine);
+            if ((this.logPath == null) && (this.messageListener != null)) {
+                try {
+                    InputStream StdErr = process.getErrorStream();
+                    (new ErrorParser(StdErr, this.messageListener)).start();
+                } catch (Exception e) {}
+            }
             exitCode = process.waitFor();
         } catch (Exception e) {}
         if (exitCode != 0)
@@ -276,5 +282,27 @@ public class XfoObj {
     
     public void setXSLTParam (String paramName, String value) {
         // fill it in
+    }
+}
+
+class ErrorParser extends Thread {
+    private InputStream ErrorStream;
+    private MessageListener listener;
+    
+    public ErrorParser (InputStream ErrorStream, MessageListener listener) {
+        this.ErrorStream = ErrorStream;
+        this.listener = listener;
+    }
+    
+    @Override
+    public void run () {
+        try {
+            // stuff
+            BufferedReader reader = new BufferedReader(new InputStreamReader(this.ErrorStream));
+            String line = reader.readLine();
+            while (line != null) {
+                this.listener.onMessage(1, 0, line);
+            }
+        } catch (Exception e) {}
     }
 }
