@@ -197,7 +197,7 @@ public class XfoObj {
             this.messageListener = null;
     }
     
-    public void setMultivol (boolean multiVol) {
+    public void setMultiVolume (boolean multiVol) {
         String opt = "-multivol";
         if (multiVol) {
             this.args.put(opt, "");
