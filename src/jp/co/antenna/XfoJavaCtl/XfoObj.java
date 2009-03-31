@@ -88,7 +88,7 @@ public class XfoObj {
             exitCode = process.waitFor();
         } catch (Exception e) {}
         if (exitCode != 0)
-            throw new XfoException(4, 1, "Something went wrong.");
+            throw new XfoException(4, 0, "Something went wrong.");
     }
     
     public void releaseObjectEx () throws XfoException {
