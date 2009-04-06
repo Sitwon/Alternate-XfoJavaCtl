@@ -76,8 +76,8 @@ public class XfoObj {
             cmdLine += this.logPath;
         }
         try {
-            if (this.messageListener != null)
-                this.messageListener.onMessage(0, 0, cmdLine);
+//            if (this.messageListener != null)
+//                this.messageListener.onMessage(0, 0, cmdLine);
             process = this.r.exec(cmdLine);
             if ((this.logPath == null) && (this.messageListener != null)) {
                 try {
@@ -87,8 +87,8 @@ public class XfoObj {
             }
             exitCode = process.waitFor();
         } catch (Exception e) {}
-        if (exitCode != 0)
-            throw new XfoException(4, 0, "Something went wrong.");
+//        if (exitCode != 0)
+//            throw new XfoException(4, 0, "Something went wrong.");
     }
     
     public void releaseObjectEx () throws XfoException {
