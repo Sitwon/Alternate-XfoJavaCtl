@@ -71,6 +71,7 @@ public class XfoObj {
         }
         // Run Formatter with Runtime.exec()
         Process process;
+        ErrorParser errorParser = null;
         int exitCode = -1;
         if (this.logPath != null) {
             cmdLine += this.logPath;
@@ -82,13 +83,19 @@ public class XfoObj {
             if ((this.logPath == null) && (this.messageListener != null)) {
                 try {
                     InputStream StdErr = process.getErrorStream();
-                    (new ErrorParser(StdErr, this.messageListener)).start();
+                    errorParser = new ErrorParser(StdErr, this.messageListener);
+                    errorParser.start();
                 } catch (Exception e) {}
             }
             exitCode = process.waitFor();
         } catch (Exception e) {}
-//        if (exitCode != 0)
-//            throw new XfoException(4, 0, "Something went wrong.");
+        if (exitCode != 0) {
+            if (errorParser != null) {
+                throw new XfoException(errorParser.LastErrorLevel, errorParser.LastErrorCode, errorParser.LastErrorMessage);
+            } else {
+                throw new XfoException(4, 0, "Failed to parse last error.");
+            }
+        }
     }
     
     public void releaseObjectEx () throws XfoException {
@@ -288,6 +295,9 @@ public class XfoObj {
 class ErrorParser extends Thread {
     private InputStream ErrorStream;
     private MessageListener listener;
+    public int LastErrorLevel;
+    public int LastErrorCode;
+    public String LastErrorMessage;
     
     public ErrorParser (InputStream ErrorStream, MessageListener listener) {
         this.ErrorStream = ErrorStream;
@@ -313,6 +323,9 @@ class ErrorParser extends Thread {
                             if (line.startsWith("XSLCmd :")) {
                                 ErrorMessage += "\n" + line.split(" ", 3)[2];
                             }
+                            this.LastErrorLevel = ErrorLevel;
+                            this.LastErrorCode = ErrorCode;
+                            this.LastErrorMessage = ErrorMessage;
                             this.listener.onMessage(ErrorLevel, ErrorCode, ErrorMessage);
                         } catch (Exception e) {}
                     }
