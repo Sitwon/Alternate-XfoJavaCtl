@@ -83,23 +83,22 @@ public class XfoObj {
      * @throws jp.co.antenna.XfoJavaCtl.XfoException
      */
     public void execute () throws XfoException {
-        String cmdLine = this.executable;
-        for (String arg : args.keySet()) {
-            cmdLine += " " + arg; 
-            if ((args.get(arg) != null) && (!args.get(arg).equals("")))
-                cmdLine += " \"" + args.get(arg) + "\"";
-        }
+		ArrayList<String> cmdArray = new ArrayList<String>();
+		cmdArray.add(this.executable);
+		for (String arg : this.args.keySet()) {
+			cmdArray.add(arg);
+			cmdArray.add(this.args.get(arg));
+		}
         // Run Formatter with Runtime.exec()
         Process process;
         ErrorParser errorParser = null;
         int exitCode = -1;
         if (this.logPath != null) {
-            cmdLine += this.logPath;
+			cmdArray.add(this.logPath);
         }
         try {
-//            if (this.messageListener != null)
-//                this.messageListener.onMessage(0, 0, cmdLine);
-            process = this.r.exec(cmdLine);
+			String[] s = new String[0];
+            process = this.r.exec(cmdArray.toArray(s));
             if ((this.logPath == null) && (this.messageListener != null)) {
                 try {
                     InputStream StdErr = process.getErrorStream();
