@@ -34,14 +34,34 @@ public class XfoObj {
     /**
      * Create the instance of XfoObj, and initialize it.
      * 
-     * @throws Exception
+     * @throws XfoException
      */
     public XfoObj () throws XfoException {
         // Check EVs and test if XslCmd.exe exists.
-        String axf_home = System.getenv("AXF43_HOME");
-        if (axf_home == null)
-            throw new XfoException(4, 1, "Can't find %AXF43_HOME%");
-        this.executable = axf_home + "\\XslCmd.exe";
+		String os;
+		try {
+			os = System.getProperty("os.name");
+			if ((os == null) || os.equals(""))
+				throw new Exception();
+		} catch (Exception e) {
+			throw new XfoException(4, 0, "Could not determine OS");
+		}
+		String axf_home;
+		try {
+			axf_home = System.getenv("AXF43_HOME");
+			if ((axf_home == null) || axf_home.equals(""))
+				throw new Exception();
+		} catch (Exception e) {
+			throw new XfoException(4, 1, "Could not find AXF43_HOME environment variable");
+		}
+		String separator = System.getProperty("file.separator");
+        this.executable = axf_home + separator;
+		if (os.equals("Linux") || os.equals("SunOS"))
+			this.executable += "bin" + separator + "XSLCmd";
+		else if (os.contains("Windows"))
+			this.executable += "XSLCmd.exe";
+		else
+			throw new XfoException(4, 2, "Unsupported OS.");
         // setup attributes
         this.clear();
     }
