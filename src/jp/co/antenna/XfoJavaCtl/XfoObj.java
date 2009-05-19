@@ -120,21 +120,21 @@ public class XfoObj {
         }
     }
 
-	public int getErrorCode () {
+	public int getErrorCode () throws XfoException {
 		if (this.lastError == null)
 			return 0;
 		else
 			return this.lastError.getErrorCode();
 	}
 
-	public int getErrorLevel () {
+	public int getErrorLevel () throws XfoException {
 		if (this.lastError == null)
 			return 0;
 		else
 			return this.lastError.getErrorLevel();
 	}
 
-	public String getErrorMessage () {
+	public String getErrorMessage () throws XfoException {
 		if (this.lastError == null)
 			return null;
 		else
