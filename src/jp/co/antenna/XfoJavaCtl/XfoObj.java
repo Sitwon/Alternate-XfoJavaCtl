@@ -29,6 +29,7 @@ public class XfoObj {
     private MessageListener messageListener;
     private String logPath;
     private LinkedHashMap<String, String> args;
+	private XfoException lastError;
     
     // Methods
     /**
@@ -75,6 +76,7 @@ public class XfoObj {
         this.logPath = null;
         this.args = new LinkedHashMap();
         this.messageListener = null;
+		this.lastError = null;
     }
     
     /**
@@ -110,7 +112,8 @@ public class XfoObj {
         } catch (Exception e) {}
         if (exitCode != 0) {
             if (errorParser != null) {
-                throw new XfoException(errorParser.LastErrorLevel, errorParser.LastErrorCode, errorParser.LastErrorMessage);
+                this.lastError = new XfoException(errorParser.LastErrorLevel, errorParser.LastErrorCode, errorParser.LastErrorMessage);
+				throw this.lastError;
             } else {
                 throw new XfoException(4, 0, "Failed to parse last error.");
             }
