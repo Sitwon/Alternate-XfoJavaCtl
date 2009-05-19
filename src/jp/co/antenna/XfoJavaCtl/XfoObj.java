@@ -117,9 +117,12 @@ public class XfoObj {
         }
     }
     
+	public void releaseObject () {
+		this.clear();
+	}
+
     public void releaseObjectEx () throws XfoException {
-        // fake it?
-        this.clear();
+        releaseObject();
     }
     
     /**
