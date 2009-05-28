@@ -28,7 +28,7 @@ public class XfoObj {
     private Runtime r;
     private MessageListener messageListener;
     private String logPath;
-    private LinkedHashMap<String, String> args;
+    private LinkedHashMap args;
 	private XfoException lastError;
     
     // Methods
@@ -97,7 +97,7 @@ public class XfoObj {
         // reset attributes        
         this.r = Runtime.getRuntime();
         this.logPath = null;
-        this.args = new LinkedHashMap<String, String>();
+        this.args = new LinkedHashMap();
         this.messageListener = null;
 		this.lastError = null;
     }
@@ -108,7 +108,7 @@ public class XfoObj {
      * @throws jp.co.antenna.XfoJavaCtl.XfoException
      */
     public void execute () throws XfoException {
-		ArrayList<String> cmdArray = new ArrayList<String>();
+		ArrayList cmdArray = new ArrayList();
 		cmdArray.add(this.executable);
 		String argList[] = this.args.keySet().toArray(new String[0]);
 		String arg;
