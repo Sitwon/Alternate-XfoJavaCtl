@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e # Exit on errors
 cd src/
 for i in jp/co/antenna/XfoJavaCtl/*.java
 do
