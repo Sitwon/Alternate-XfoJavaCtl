@@ -74,7 +74,7 @@ public class XfoObj {
         // reset attributes        
         this.r = Runtime.getRuntime();
         this.logPath = null;
-        this.args = new LinkedHashMap();
+        this.args = new LinkedHashMap<String, String>();
         this.messageListener = null;
 		this.lastError = null;
     }
