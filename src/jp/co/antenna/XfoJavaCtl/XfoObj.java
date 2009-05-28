@@ -110,11 +110,11 @@ public class XfoObj {
     public void execute () throws XfoException {
 		ArrayList cmdArray = new ArrayList();
 		cmdArray.add(this.executable);
-		String argList[] = this.args.keySet().toArray(new String[0]);
+		Object argList[] = this.args.keySet().toArray();
 		String arg;
 		for (int i = 0; i < argList.length; i++) {
 		//for (String arg : this.args.keySet()) {
-			arg = argList[i];
+			arg = (String) argList[i];
 			cmdArray.add(arg);
 			cmdArray.add(this.args.get(arg));
 		}
