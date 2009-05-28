@@ -126,8 +126,12 @@ public class XfoObj {
 			cmdArray.add(this.logPath);
         }
         try {
-			String[] s = new String[0];
-            process = this.r.exec(cmdArray.toArray(s));
+			Object[] o = cmdArray.toArray();
+			String[] s = new String[o.length];
+			for (int i = 0; i < s.length; i++) {
+				s[i] = (String) o[i];
+			}
+            process = this.r.exec(s);
             if (this.logPath == null) {
                 try {
                     InputStream StdErr = process.getErrorStream();
