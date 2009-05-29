@@ -6,3 +6,4 @@ do
 	javac -source 1.4 -target 1.4 $i
 done
 jar cf ../XfoJavaCtl_1.4.jar jp/co/antenna/XfoJavaCtl/*.class
+rm jp/co/antenna/XfoJavaCtl/*.class
