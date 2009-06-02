@@ -378,7 +378,9 @@ class ErrorParser extends Thread {
                 } else if (line.startsWith("Invalid license.")) {
 					int ErrorLevel = 4;
 					int ErrorCode = 24579;
-					String ErrorMessage = line + reader.readLine() + reader.readLine();
+					String ErrorMessage = line 
+						+ "\n" + reader.readLine() 
+						+ "\n" + reader.readLine();
 					this.LastErrorLevel = ErrorLevel;
 					this.LastErrorCode = ErrorCode;
 					this.LastErrorMessage = ErrorMessage;
