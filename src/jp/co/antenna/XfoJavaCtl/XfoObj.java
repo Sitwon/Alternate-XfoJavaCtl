@@ -101,7 +101,7 @@ public class XfoObj {
         try {
 			String[] s = new String[0];
             process = this.r.exec(cmdArray.toArray(s));
-            if ((this.logPath == null) && (this.messageListener != null)) {
+            if (this.logPath == null) {
                 try {
                     InputStream StdErr = process.getErrorStream();
                     errorParser = new ErrorParser(StdErr, this.messageListener);
@@ -111,7 +111,7 @@ public class XfoObj {
             exitCode = process.waitFor();
         } catch (Exception e) {}
         if (exitCode != 0) {
-            if (errorParser != null) {
+            if (errorParser != null || errorParser.LastErrorCode == 0) {
                 this.lastError = new XfoException(errorParser.LastErrorLevel, errorParser.LastErrorCode, errorParser.LastErrorMessage);
 				throw this.lastError;
             } else {
@@ -372,7 +372,8 @@ class ErrorParser extends Thread {
                             this.LastErrorLevel = ErrorLevel;
                             this.LastErrorCode = ErrorCode;
                             this.LastErrorMessage = ErrorMessage;
-                            this.listener.onMessage(ErrorLevel, ErrorCode, ErrorMessage);
+							if (this.listener != null)
+								this.listener.onMessage(ErrorLevel, ErrorCode, ErrorMessage);
                         } catch (Exception e) {}
                     }
                 } else if (line.startsWith("Invalid license.")) {
@@ -384,7 +385,8 @@ class ErrorParser extends Thread {
 					this.LastErrorLevel = ErrorLevel;
 					this.LastErrorCode = ErrorCode;
 					this.LastErrorMessage = ErrorMessage;
-					this.listener.onMessage(ErrorLevel, ErrorCode, ErrorMessage);
+					if (this.listener != null)
+						this.listener.onMessage(ErrorLevel, ErrorCode, ErrorMessage);
 				}
                 line = reader.readLine();
             }
