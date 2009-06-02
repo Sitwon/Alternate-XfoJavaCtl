@@ -375,7 +375,15 @@ class ErrorParser extends Thread {
                             this.listener.onMessage(ErrorLevel, ErrorCode, ErrorMessage);
                         } catch (Exception e) {}
                     }
-                }
+                } else if (line.startsWith("Invalid license.")) {
+					int ErrorLevel = 4;
+					int ErrorCode = 24579;
+					String ErrorMessage = line + reader.readLine() + reader.readLine();
+					this.LastErrorLevel = ErrorLevel;
+					this.LastErrorCode = ErrorCode;
+					this.LastErrorMessage = ErrorMessage;
+					this.listener.onMessage(ErrorLevel, ErrorCode, ErrorMessage);
+				}
                 line = reader.readLine();
             }
         } catch (Exception e) {}
