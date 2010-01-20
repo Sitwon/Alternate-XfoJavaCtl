@@ -48,19 +48,42 @@ public class XfoObj {
 			throw new XfoException(4, 0, "Could not determine OS");
 		}
 		String axf_home;
+		int axf_ver = 1;
 		try {
-			axf_home = System.getenv("AXF43_HOME");
+			axf_home = System.getenv("AHF51_HOME");
+			if ((axf_home == null) || axf_home.equals(""))
+				axf_home = System.getenv("AHF51_64_HOME");
+			if ((axf_home == null) || axf_home.equals(""))
+				axf_home = System.getenv("AHF50_HOME");
+			if ((axf_home == null) || axf_home.equals(""))
+				axf_home = System.getenv("AHF50_64_HOME");
+			if ((axf_home == null) || axf_home.equals("")) {
+				axf_home = System.getenv("AXF43_HOME");
+				axf_ver = 0;
+			}
+			if ((axf_home == null) || axf_home.equals("")) {
+				axf_home = System.getenv("AXF43_64_HOME");
+				axf_ver = 0;
+			}
 			if ((axf_home == null) || axf_home.equals(""))
 				throw new Exception();
 		} catch (Exception e) {
-			throw new XfoException(4, 1, "Could not find AXF43_HOME environment variable");
+			throw new XfoException(4, 1, "Could not locate Formatter's environment variables");
 		}
 		String separator = System.getProperty("file.separator");
         this.executable = axf_home + separator;
-		if (os.equals("Linux") || os.equals("SunOS"))
-			this.executable += "bin" + separator + "XSLCmd";
-		else if (os.contains("Windows"))
-			this.executable += "XSLCmd.exe";
+		if (os.equals("Linux") || os.equals("SunOS")) {
+			if (axf_ver == 0)
+				this.executable += "bin" + separator + "XSLCmd";
+			else
+				this.executable += "bin" + separator + "AHFCmd";
+		}
+		else if (os.contains("Windows")) {
+			if (axf_ver == 0)
+				this.executable += "XSLCmd.exe";
+			else
+				this.executable += "AHFCmd.exe";
+		}
 		else
 			throw new XfoException(4, 2, "Unsupported OS.");
         // setup attributes
