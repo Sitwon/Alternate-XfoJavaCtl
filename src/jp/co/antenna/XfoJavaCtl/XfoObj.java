@@ -372,10 +372,12 @@ public class XfoObj {
 		Runtime rt = Runtime.getRuntime();
 		Process p;
 		try {
-			if (System.getProperty("os.name") == "Windows")
-				p = rt.exec("set");
-			else
+			if (System.getProperty("os.name").contains("Windows")) {
+				System.err.println("Sorry, Windows is not supported at this time.");
+				return null;
+			} else {
 				p = rt.exec("env");
+			}
 			p.waitFor();
 			if (p.exitValue() != 0) {
 				return null;
