@@ -372,7 +372,10 @@ public class XfoObj {
 		Runtime rt = Runtime.getRuntime();
 		Process p;
 		try {
-			p = rt.exec("env");
+			if (System.getProperty("os.name") == "Windows")
+				p = rt.exec("set");
+			else
+				p = rt.exec("env");
 			p.waitFor();
 			if (p.exitValue() != 0) {
 				return null;
