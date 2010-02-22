@@ -50,19 +50,19 @@ public class XfoObj {
 		String axf_home;
 		int axf_ver = 1;
 		try {
-			axf_home = System.getenv("AHF51_HOME");
+			axf_home = System_getenv("AHF51_HOME");
 			if ((axf_home == null) || axf_home.equals(""))
-				axf_home = System.getenv("AHF51_64_HOME");
+				axf_home = System_getenv("AHF51_64_HOME");
 			if ((axf_home == null) || axf_home.equals(""))
-				axf_home = System.getenv("AHF50_HOME");
+				axf_home = System_getenv("AHF50_HOME");
 			if ((axf_home == null) || axf_home.equals(""))
-				axf_home = System.getenv("AHF50_64_HOME");
+				axf_home = System_getenv("AHF50_64_HOME");
 			if ((axf_home == null) || axf_home.equals("")) {
-				axf_home = System.getenv("AXF43_HOME");
+				axf_home = System_getenv("AXF43_HOME");
 				axf_ver = 0;
 			}
 			if ((axf_home == null) || axf_home.equals("")) {
-				axf_home = System.getenv("AXF43_64_HOME");
+				axf_home = System_getenv("AXF43_64_HOME");
 				axf_ver = 0;
 			}
 			if ((axf_home == null) || axf_home.equals(""))
@@ -367,6 +367,28 @@ public class XfoObj {
     public void setXSLTParam (String paramName, String value) {
         // fill it in
     }
+
+	private static String System_getenv (String name) {
+		Runtime rt = Runtime.getRuntime();
+		Process p;
+		try {
+			p = rt.exec("env");
+			p.waitFor();
+			if (p.exitValue() != 0) {
+				return null;
+			}
+			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String line = reader.readLine();
+			while (line != null) {
+				if (line.startsWith(name)) {
+					line = line.replaceFirst(name + "=", "");
+					return line;
+				}
+				line = reader.readLine();
+			}
+		} catch (Exception ex) {}
+		return null;
+	}
 }
 
 class ErrorParser extends Thread {
