@@ -138,11 +138,11 @@ public class XfoObj {
             exitCode = process.waitFor();
         } catch (Exception e) {}
         if (exitCode != 0) {
-            if (errorParser != null || errorParser.LastErrorCode == 0) {
+            if (errorParser != null && errorParser.LastErrorCode != 0) {
                 this.lastError = new XfoException(errorParser.LastErrorLevel, errorParser.LastErrorCode, errorParser.LastErrorMessage);
 				throw this.lastError;
             } else {
-                throw new XfoException(4, 0, "Failed to parse last error.");
+                throw new XfoException(4, 0, "Failed to parse last error. Exit code: " + exitCode);
             }
         }
     }
