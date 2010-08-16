@@ -69,6 +69,10 @@ public class XfoObj {
 				axf_home = System.getenv("AXF41_HOME");
 				axf_ver = 0;
 			}
+			if ((axf_home == null) || axf_home.equals("")) {
+				axf_home = System.getenv("AXF4_HOME");
+				axf_ver = 0;
+			}
 			if ((axf_home == null) || axf_home.equals(""))
 				throw new Exception();
 		} catch (Exception e) {
