@@ -363,6 +363,10 @@ public class XfoObj {
             this.args.remove(opt);
         }
     }
+
+    public void addOptionFileURI (String path) {
+        this.setOptionFileURI(path);
+    }
     
     public void setXSLTParam (String paramName, String value) {
         // fill it in
