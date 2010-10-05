@@ -50,7 +50,11 @@ public class XfoObj {
 		String axf_home;
 		int axf_ver = 1;
 		try {
-			axf_home = System.getenv("AHF51_HOME");
+			axf_home = System.getenv("AHF52_HOME");
+			if ((axf_home == null) || axf_home.equals(""))
+				axf_home = System.getenv("AHF52_64_HOME");
+			if ((axf_home == null) || axf_home.equals(""))
+				axf_home = System.getenv("AHF51_HOME");
 			if ((axf_home == null) || axf_home.equals(""))
 				axf_home = System.getenv("AHF51_64_HOME");
 			if ((axf_home == null) || axf_home.equals(""))
