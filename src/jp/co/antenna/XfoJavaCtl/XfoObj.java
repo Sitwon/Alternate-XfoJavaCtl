@@ -97,7 +97,7 @@ public class XfoObj {
 				this.executable += "AHFCmd.exe";
 		}
 		else
-			throw new XfoException(4, 2, "Unsupported OS.");
+			throw new XfoException(4, 2, "Unsupported OS: " + os);
         // setup attributes
         this.clear();
     }
