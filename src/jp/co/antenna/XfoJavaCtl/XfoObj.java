@@ -381,7 +381,7 @@ class ErrorParser extends Thread {
             BufferedReader reader = new BufferedReader(new InputStreamReader(this.ErrorStream));
             String line = reader.readLine();
             while (line != null) {
-                if (line.startsWith("XSLCmd :")) {
+                if (line.startsWith("XSLCmd :") || line.startsWith("AHFCmd :")) {
                     if (line.contains("Error Level")) {
                         try {
                             int ErrorLevel = Integer.parseInt(line.substring(line.length() - 1, line.length()));
@@ -390,7 +390,7 @@ class ErrorParser extends Thread {
                             line = reader.readLine();
                             String ErrorMessage = line.split(" ", 3)[2];
                             line = reader.readLine();
-                            if (line.startsWith("XSLCmd :")) {
+                            if (line.startsWith("XSLCmd :") || line.startsWith("AHFCmd :")) {
                                 ErrorMessage += "\n" + line.split(" ", 3)[2];
                             }
                             this.LastErrorLevel = ErrorLevel;
