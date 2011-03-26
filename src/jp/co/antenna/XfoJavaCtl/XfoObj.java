@@ -203,8 +203,8 @@ public class XfoObj {
 				InputStream StdErr = process.getErrorStream();
 				errorParser = new ErrorParser(StdErr, this.messageListener);
 				errorParser.start();
-				// process.getInputStream
-				// process.getOutputStream
+				(new StreamCopyThread(process.getInputStream(), dst)).start();
+				(new StreamCopyThread(src, process.getOutputStream())).start();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
