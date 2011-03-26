@@ -393,6 +393,33 @@ public class XfoObj {
     }
 }
 
+class StreamCopyThread extends Thread {
+	private InputStream inStream;
+	private OutputStream outStream;
+
+	public StreamCopyThread (InputStream inStream, OutputStream outStream) {
+		this.inStream = inStream;
+		this.outStream = outStream;
+	}
+
+	@Override
+	public void run () {
+		try {
+			int COUNT = 1024;
+			byte[] buff = new byte[COUNT];
+			int len;
+			while ((len = this.inStream.read(buff, 0, COUNT)) != -1) {
+				this.outStream.write(buff, 0, len);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {inStream.close();} catch (Exception e) {}
+			try {outStream.close();} catch (Exception e) {}
+		}
+	}
+}
+
 class ErrorParser extends Thread {
     private InputStream ErrorStream;
     private MessageListener listener;
