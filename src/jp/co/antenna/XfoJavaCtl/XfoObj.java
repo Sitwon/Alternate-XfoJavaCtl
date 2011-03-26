@@ -186,9 +186,40 @@ public class XfoObj {
      * @throws jp.co.antenna.XfoJavaCtl.XfoException
      */
     public void render (InputStream src, OutputStream dst, String outDevice) throws XfoException {
-        if (this.messageListener != null)
-            this.messageListener.onMessage(4, 0, "render() is not implemented yet.");
-        throw new XfoException(4, 0, "render() is not implemented yet.");
+		ArrayList<String> cmdArray = new ArrayList<String>();
+		cmdArray.add(this.executable);
+		cmdArray.add("-d @STDIN");
+		cmdArray.add("-o @STDOUT");
+		cmdArray.add("-p " + outDevice);
+
+		Process process;
+		ErrorParser errorParser = null;
+		int exitCode = -1;
+
+		try {
+			String[] s = new String[0];
+			process = this.r.exec(cmdArray.toArray(s));
+			try {
+				InputStream StdErr = process.getErrorStream();
+				errorParser = new ErrorParser(StdErr, this.messageListener);
+				errorParser.start();
+				// process.getInputStream
+				// process.getOutputStream
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			exitCode = process.waitFor();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (exitCode != 0) {
+			if (errorParser != null && errorParser.LastErrorCode != 0) {
+				this.lastError = new XfoException(errorParser.LastErrorLevel, errorParser.LastErrorCode, errorParser.LastErrorMessage);
+				throw this.lastError;
+			} else {
+				throw new XfoException(4, 0, "Failed to parse last error. Exit code: " + exitCode);
+			}
+		}
     }
     
     public void setBatchPrint (boolean bat) {
