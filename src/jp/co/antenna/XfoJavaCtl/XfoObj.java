@@ -27,7 +27,6 @@ public class XfoObj {
     private String executable;
     private Runtime r;
     private MessageListener messageListener;
-    private String logPath;
     private LinkedHashMap<String, String> args;
 	private XfoException lastError;
     
@@ -108,7 +107,6 @@ public class XfoObj {
     public void clear () {
         // reset attributes        
         this.r = Runtime.getRuntime();
-        this.logPath = null;
         this.args = new LinkedHashMap<String, String>();
         this.messageListener = null;
 		this.lastError = null;
@@ -130,19 +128,14 @@ public class XfoObj {
         Process process;
         ErrorParser errorParser = null;
         int exitCode = -1;
-        if (this.logPath != null) {
-			cmdArray.add(this.logPath);
-        }
         try {
 			String[] s = new String[0];
             process = this.r.exec(cmdArray.toArray(s));
-            if (this.logPath == null) {
-                try {
-                    InputStream StdErr = process.getErrorStream();
-                    errorParser = new ErrorParser(StdErr, this.messageListener);
-                    errorParser.start();
-                } catch (Exception e) {}
-            }
+			try {
+				InputStream StdErr = process.getErrorStream();
+				errorParser = new ErrorParser(StdErr, this.messageListener);
+				errorParser.start();
+			} catch (Exception e) {}
             exitCode = process.waitFor();
         } catch (Exception e) {}
         if (exitCode != 0) {
@@ -219,14 +212,6 @@ public class XfoObj {
         }
         else {
             this.args.remove(opt);
-        }
-    }
-    
-    public void setErrorLogPath (String path) {
-        if (path != null && !path.equals("")) {
-            this.logPath = " 2>> " + path;
-        } else {
-            this.logPath = null;
         }
     }
     
