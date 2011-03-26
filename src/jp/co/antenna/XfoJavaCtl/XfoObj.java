@@ -188,6 +188,10 @@ public class XfoObj {
     public void render (InputStream src, OutputStream dst, String outDevice) throws XfoException {
 		ArrayList<String> cmdArray = new ArrayList<String>();
 		cmdArray.add(this.executable);
+		for (String arg : this.args.keySet()) {
+			cmdArray.add(arg);
+			cmdArray.add(this.args.get(arg));
+		}
 		cmdArray.add("-d");
 		cmdArray.add("@STDIN");
 		cmdArray.add("-o");
