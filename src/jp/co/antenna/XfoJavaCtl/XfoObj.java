@@ -188,9 +188,12 @@ public class XfoObj {
     public void render (InputStream src, OutputStream dst, String outDevice) throws XfoException {
 		ArrayList<String> cmdArray = new ArrayList<String>();
 		cmdArray.add(this.executable);
-		cmdArray.add("-d @STDIN");
-		cmdArray.add("-o @STDOUT");
-		cmdArray.add("-p " + outDevice);
+		cmdArray.add("-d");
+		cmdArray.add("@STDIN");
+		cmdArray.add("-o");
+		cmdArray.add("@STDOUT");
+		cmdArray.add("-p");
+		cmdArray.add(outDevice);
 
 		Process process;
 		ErrorParser errorParser = null;
