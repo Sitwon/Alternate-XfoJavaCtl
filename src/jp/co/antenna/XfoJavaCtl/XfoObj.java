@@ -7,6 +7,10 @@ package jp.co.antenna.XfoJavaCtl;
 
 import java.io.*;
 import java.util.*;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * XfoObj Class is the object class of XSL Formatter
@@ -228,6 +232,33 @@ public class XfoObj {
 			}
 		}
     }
+
+	/**
+	 * Transforms an XML document specified to xmlSrc using an XSL stylesheet specified to xslSrc. 
+	 * Then executes the formatting of XSL-FO document and outputs it to dst in the output form specified for outDevice. 
+	 * Xalan of JAXP (Java API for XML Processing) is used for the XSLT conversion. The setExternalXSLT method and 
+	 * the setting of XSLT processor in the option setting file is disregarded.
+	 *
+	 * @param xmlSrc XML Document
+	 * @param xslSrc XSL Document
+	 * @param dst output stream
+	 * @param outDevice output device. Please refer to a setPrinterName method about the character string to specify.
+	 * @throws jp.co.antenna.XfoJavaCtl.XfoException
+	 */
+	public void render(InputStream xmlSrc, InputStream xslSrc, OutputStream dst, String outDevice) throws XfoException {
+		try {
+			ByteArrayOutputStream baosFO = new ByteArrayOutputStream();
+			TransformerFactory transFactory = TransformerFactory.newInstance();
+			Transformer transformer = transFactory.newTransformer(new StreamSource(xslSrc));
+			transformer.transform(new StreamSource(xmlSrc), new StreamResult(baosFO));
+			ByteArrayInputStream baisFO = new ByteArrayInputStream(baosFO.toByteArray());
+			this.render(baisFO, dst, outDevice);
+		} catch (XfoException xfoe) {
+			throw xfoe;
+		} catch (Exception e) {
+			throw new XfoException(4, 0, "XSLT Transformation failed: " + e.toString());
+		}
+	}
     
     public void setBatchPrint (boolean bat) {
         // Fake it. 
