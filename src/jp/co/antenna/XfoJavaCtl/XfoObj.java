@@ -260,6 +260,23 @@ public class XfoObj {
 		}
 	}
     
+	/**
+	 * Sets the default base URI.
+	 *
+	 * @param uri Base URI
+	 * @throws jp.co.antenna.XfoJavaCtl.XfoException
+	 */
+	public void setBaseURI (String uri) {
+		String opt = "-base";
+		if (uri != null && !uri.equals("")) {
+			if (this.args.containsKey(opt))
+				this.args.remove(opt);
+			this.args.put(opt, uri);
+		} else {
+			this.args.remove(opt);
+		}
+	}
+
     public void setBatchPrint (boolean bat) {
         // Fake it. 
     }
