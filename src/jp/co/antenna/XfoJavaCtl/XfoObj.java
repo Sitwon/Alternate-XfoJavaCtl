@@ -130,7 +130,8 @@ public class XfoObj {
 		cmdArray.add(this.executable);
 		for (String arg : this.args.keySet()) {
 			cmdArray.add(arg);
-			cmdArray.add(this.args.get(arg));
+			if (this.args.get(arg) != null)
+				cmdArray.add(this.args.get(arg));
 		}
         // Run Formatter with Runtime.exec()
         Process process;
@@ -198,7 +199,8 @@ public class XfoObj {
 		cmdArray.add(this.executable);
 		for (String arg : this.args.keySet()) {
 			cmdArray.add(arg);
-			cmdArray.add(this.args.get(arg));
+			if (this.args.get(arg) != null)
+				cmdArray.add(this.args.get(arg));
 		}
 		cmdArray.add("-d");
 		cmdArray.add("@STDIN");
@@ -363,7 +365,7 @@ public class XfoObj {
     public void setMultiVolume (boolean multiVol) {
         String opt = "-multivol";
         if (multiVol) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
@@ -410,7 +412,7 @@ public class XfoObj {
     public void setPdfNoAccessibility (boolean newVal) {
         String opt = "-nab";
         if (newVal) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
@@ -419,7 +421,7 @@ public class XfoObj {
     public void setPdfNoAddingOrChangingComments (boolean newVal) {
         String opt = "-nca";
         if (newVal) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
@@ -428,7 +430,7 @@ public class XfoObj {
     public void setPdfNoAssembleDoc (boolean newVal) {
         String opt = "-nad";
         if (newVal) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
@@ -437,7 +439,7 @@ public class XfoObj {
     public void setPdfNoChanging (boolean newVal) {
         String opt = "-ncg";
         if (newVal) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
@@ -446,7 +448,7 @@ public class XfoObj {
     public void setPdfNoContentCopying (boolean newVal) {
         String opt = "-ncc";
         if (newVal) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
@@ -455,7 +457,7 @@ public class XfoObj {
     public void setPdfNoFillForm (boolean newVal) {
         String opt = "-nff";
         if (newVal) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
@@ -464,7 +466,7 @@ public class XfoObj {
     public void setPdfNoPrinting (boolean newVal) {
         String opt = "-npt";
         if (newVal) {
-            this.args.put(opt, "");
+            this.args.put(opt, null);
         } else {
             this.args.remove(opt);
         }
