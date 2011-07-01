@@ -407,6 +407,69 @@ public class XfoObj {
         // fill it in
     }
 
+    public void setPdfNoAccessibility (boolean newVal) {
+        String opt = "-nab";
+        if (newVal) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
+    public void setPdfNoAddingOrChangingComments (boolean newVal) {
+        String opt = "-nca";
+        if (newVal) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
+    public void setPdfNoAssembleDoc (boolean newVal) {
+        String opt = "-nad";
+        if (newVal) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
+    public void setPdfNoChanging (boolean newVal) {
+        String opt = "-ncg";
+        if (newVal) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
+    public void setPdfNoContentCopying (boolean newVal) {
+        String opt = "-ncc";
+        if (newVal) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
+    public void setPdfNoFillForm (boolean newVal) {
+        String opt = "-nff";
+        if (newVal) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
+    public void setPdfNoPrinting (boolean newVal) {
+        String opt = "-npt";
+        if (newVal) {
+            this.args.put(opt, "");
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
     /**
      * Specifies the owner password for PDF. The password must be within 32 bytes.
      * Effective when outputting to PDF.
