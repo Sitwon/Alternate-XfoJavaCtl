@@ -406,6 +406,24 @@ public class XfoObj {
     public void setPdfImageCompression (int compressionMethod) {
         // fill it in
     }
+
+    /**
+     * Specifies the owner password for PDF. The password must be within 32 bytes.
+     * Effective when outputting to PDF.
+     *
+     * @param newVal Owner password
+     */
+    public void setPdfOwnerPassword (String newVal) {
+        String opt = "-ownerpwd";
+        if (newVal != null && !newVal.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, newVal);
+        }
+        else {
+            this.args.remove(opt);
+        }
+    }
     
     public void setPrinterName (String prn) {
         String opt = "-p";
