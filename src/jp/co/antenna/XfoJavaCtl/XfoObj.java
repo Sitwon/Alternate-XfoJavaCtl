@@ -489,6 +489,10 @@ public class XfoObj {
             this.args.remove(opt);
         }
     }
+
+    public void setPdfMasterPassword (String newVal) {
+        this.setPdfOwnerPassword(newVal);
+    }
     
     public void setPrinterName (String prn) {
         String opt = "-p";
