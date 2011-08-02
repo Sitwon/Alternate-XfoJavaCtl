@@ -514,6 +514,32 @@ public class XfoObj {
         }
     }
     
+    /**
+     * Specifies the two pass format.
+     *
+     * @param val specification of two pass format
+     */
+    public void setTwoPassFormatting (boolean val) {
+        String opt = "-2pass";
+        if (val) {
+            this.args.put(opt, null);
+        } else {
+            this.args.remove(opt);
+        }
+    }
+
+    /**
+     * Get the specification of two pass format.
+     *
+     * @return specification of two pass format.
+     */
+    public boolean getTwoPassFormatting () {
+        if (this.args.containsKey("-2pass")) {
+            return true;
+        }
+        return false;
+    }
+
     public void setOptionFileURI (String path) {
         String opt = "-i";
         if (path != null && !path.equals("")) {
