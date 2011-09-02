@@ -91,7 +91,7 @@ public class XfoObj {
 		}
 		String separator = System.getProperty("file.separator");
         this.executable = axf_home + separator;
-		if (os.equals("Linux") || os.equals("SunOS") || os.equals("AIX")) {
+		if (os.equals("Linux") || os.equals("SunOS") || os.equals("AIX") || os.equals("Mac OS X")) {
 			if (axf_ver == 0)
 				this.executable += "bin" + separator + "XSLCmd";
 			else
