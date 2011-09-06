@@ -26,12 +26,19 @@ public class XfoObj {
     public static final int S_PDF_EMBALLFONT_PART = 0;
     public static final int S_PDF_EMBALLFONT_ALL = 1;
     public static final int S_PDF_EMBALLFONT_BASE14 = 2;
+
+    public static final int S_FORMATTERTYPE_AUTO = 0;
+    public static final int S_FORMATTERTYPE_HTML = 1;
+    public static final int S_FORMATTERTYPE_XHTML = 2;
+    public static final int S_FORMATTERTYPE_XMLCSS = 3;
+    public static final int S_FORMATTERTYPE_XSLFO = 4;
     
     // Attributes
     private String executable;
     private Runtime r;
     private MessageListener messageListener;
     private LinkedHashMap<String, String> args;
+	private ArrayList<String> userCSS;
 	private XfoException lastError;
     
     // Methods
@@ -117,6 +124,7 @@ public class XfoObj {
         this.r = Runtime.getRuntime();
         this.args = new LinkedHashMap<String, String>();
         this.messageListener = null;
+		this.userCSS = new ArrayList<String>();
 		this.lastError = null;
     }
     
@@ -132,6 +140,10 @@ public class XfoObj {
 			cmdArray.add(arg);
 			if (this.args.get(arg) != null)
 				cmdArray.add(this.args.get(arg));
+		}
+		for (String css : this.userCSS) {
+			cmdArray.add("-css");
+			cmdArray.add(css);
 		}
         // Run Formatter with Runtime.exec()
         Process process;
@@ -201,6 +213,10 @@ public class XfoObj {
 			cmdArray.add(arg);
 			if (this.args.get(arg) != null)
 				cmdArray.add(this.args.get(arg));
+		}
+		for (String css : this.userCSS) {
+			cmdArray.add("-css");
+			cmdArray.add(css);
 		}
 		cmdArray.add("-d");
 		cmdArray.add("@STDIN");
@@ -393,6 +409,36 @@ public class XfoObj {
         else {
             this.args.remove(opt);
         }
+    }
+
+    public void setFormatterType (int formatterType) {
+        String opt = "-f";
+        if (this.args.containsKey(opt))
+            this.args.remove(opt);
+        switch (formatterType) {
+            case 0: this.args.put(opt, "AUTO"); break;
+            case 1: this.args.put(opt, "HTML"); break;
+            case 2: this.args.put(opt, "XHTML"); break;
+            case 3: this.args.put(opt, "XMLCSS"); break;
+            case 4: this.args.put(opt, "XSLFO"); break;
+        }
+    }
+
+    public void setHtmlDefaultCharset (String charset) {
+        String opt = "-htmlcs";
+        if (charset != null && !charset.equals("")) {
+            if (this.args.containsKey(opt))
+                this.args.remove(opt);
+            this.args.put(opt, charset);
+        }
+        else {
+            this.args.remove(opt);
+        }
+    }
+
+    public void addUserStylesheetURI (String uri) {
+        if (uri != null && !uri.equals(""))
+            this.userCSS.add(uri);
     }
     
     public void setPdfEmbedAllFontsEx (int embedLevel) throws XfoException {
