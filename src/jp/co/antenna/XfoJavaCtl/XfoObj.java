@@ -32,6 +32,19 @@ public class XfoObj {
     public static final int S_FORMATTERTYPE_XHTML = 2;
     public static final int S_FORMATTERTYPE_XMLCSS = 3;
     public static final int S_FORMATTERTYPE_XSLFO = 4;
+
+    public static final int S_PDF_VERSION_13 = 0;
+    public static final int S_PDF_VERSION_14 = 1;
+    public static final int S_PDF_VERSION_15 = 2;
+    public static final int S_PDF_VERSION_16 = 3;
+    public static final int S_PDF_VERSION_17 = 4;
+    public static final int S_PDF_VERSION_A_1a_2005 = 200;
+    public static final int S_PDF_VERSION_A_1b_2005 = 400;
+    public static final int S_PDF_VERSION_X_1a_2001 = 101;
+    public static final int S_PDF_VERSION_X_1a_2003 = 104;
+    public static final int S_PDF_VERSION_X_2_2003 = 105;
+    public static final int S_PDF_VERSION_X_3_2002 = 103;
+    public static final int S_PDF_VERSION_X_3_2003 = 106;
     
     // Attributes
     private String executable;
@@ -542,6 +555,53 @@ public class XfoObj {
         else {
             this.args.remove(opt);
         }
+    }
+
+    public void setPdfVersion (int newVal) {
+        String opt = "-pdfver";
+        String version = null;
+        if (this.args.containsKey(opt))
+            this.args.remove(opt);
+        switch (newVal) {
+            case S_PDF_VERSION_13:
+                version = "PDF1.3";
+                break;
+            case S_PDF_VERSION_14:
+                version = "PDF1.4";
+                break;
+            case S_PDF_VERSION_15:
+                version = "PDF1.5";
+                break;
+            case S_PDF_VERSION_16:
+                version = "PDF1.6";
+                break;
+            case S_PDF_VERSION_17:
+                version = "PDF1.7";
+                break;
+            case S_PDF_VERSION_A_1a_2005:
+                version = "PDF/A-1a:2005";
+                break;
+            case S_PDF_VERSION_A_1b_2005:
+                version = "PDF/A-1b:2005";
+                break;
+            case S_PDF_VERSION_X_1a_2001:
+                version = "PDF/X-1a:2001";
+                break;
+            case S_PDF_VERSION_X_1a_2003:
+                version = "PDF/X-1a:2003";
+                break;
+            case S_PDF_VERSION_X_2_2003:
+                version = "PDF/X-2:2003";
+                break;
+            case S_PDF_VERSION_X_3_2002:
+                version = "PDF/X-3:2002";
+                break;
+            case S_PDF_VERSION_X_3_2003:
+                version = "PDF/X-3:2003";
+                break;
+        }
+        if (version != null)
+            this.args.put(opt, version);
     }
     
     public void setPrinterName (String prn) {
